@@ -11,7 +11,7 @@ from discord import Guild, FFmpegPCMAudio, VoiceChannel
 from Music.Playlist import Playlist
 from Music.Song import Song
 from Config.Configs import VConfigs
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Music.Downloader import Downloader
 from Parallelism.Commands import VCommands, VCommandsType
 
@@ -50,7 +50,7 @@ class ProcessPlayer(Process):
         self.__voiceChannelID = voiceID
         # All information of discord context will be retrieved directly with discord API
         self.__guild: Guild = None
-        self.__bot: VulkanBot = None
+        self.__bot: JimBoi = None
         self.__voiceChannel: VoiceChannel = None
         self.__voiceClient: VoiceClient = None
 
@@ -392,7 +392,7 @@ class ProcessPlayer(Process):
                 self.__playlist.clear()
                 self.__playlist.loop_off()
 
-    async def __createBotInstance(self) -> VulkanBot:
+    async def __createBotInstance(self) -> JimBoi:
         """Load a new bot instance that should not be directly called."""
         initializer = VulkanInitializer(willListen=False)
         bot = initializer.getBot()
@@ -440,7 +440,7 @@ class ProcessPlayer(Process):
             print(f'[PROCESS PLAYER -> ERROR IN CHECK BOT ALONE] -> {e}')
             return False
 
-    async def __ensureDiscordConnection(self, bot: VulkanBot) -> None:
+    async def __ensureDiscordConnection(self, bot: JimBoi) -> None:
         """Await in this point until connection to discord is established"""
         guild = None
         while guild is None:

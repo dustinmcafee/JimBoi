@@ -2,16 +2,16 @@ from typing import List
 from discord.ext.commands import Context
 from discord import Message, Embed
 from Config.Singleton import Singleton
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 
 
 class Cleaner(Singleton):
-    def __init__(self, bot: VulkanBot = None) -> None:
+    def __init__(self, bot: JimBoi = None) -> None:
         if not super().created:
             self.__bot = bot
             self.__clean_str = 'Uploader:'
 
-    def set_bot(self, bot: VulkanBot) -> None:
+    def set_bot(self, bot: JimBoi) -> None:
         self.__bot = bot
 
     async def clean_messages(self, ctx: Context, quant: int) -> None:

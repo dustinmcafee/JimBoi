@@ -21,7 +21,7 @@ from Handlers.VolumeHandler import VolumeHandler
 from Messages.MessagesCategory import MessagesCategory
 from Messages.Responses.EmoteCogResponse import EmoteCommandResponse
 from Messages.Responses.EmbedCogResponse import EmbedCommandResponse
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Config.Configs import VConfigs
 from Config.Embeds import VEmbeds
 from Parallelism.ProcessPlayerManager import ProcessPlayerManager
@@ -37,8 +37,8 @@ class MusicCog(Cog):
     Execute the handler and then create a specific View to be showed in Discord
     """
 
-    def __init__(self, bot: VulkanBot) -> None:
-        self.__bot: VulkanBot = bot
+    def __init__(self, bot: JimBoi) -> None:
+        self.__bot: JimBoi = bot
         self.__embeds = VEmbeds()
         configs = VConfigs()
         if configs.SONG_PLAYBACK_IN_SEPARATE_PROCESS:

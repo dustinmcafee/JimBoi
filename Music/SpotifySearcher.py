@@ -6,7 +6,7 @@ from Config.Configs import VConfigs
 from Config.Messages import SpotifyMessages
 
 
-class SpotifySearch():
+class SpotifySearch:
     def __init__(self) -> None:
         self.__messages = SpotifyMessages()
         self.__config = VConfigs()

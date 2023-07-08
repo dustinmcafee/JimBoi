@@ -2,7 +2,7 @@ from random import choices
 import string
 from discord.bot import Bot
 from discord import Intents
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from os import listdir
 from Config.Configs import VConfigs
 from Config.Exceptions import VulkanError
@@ -17,24 +17,24 @@ class VulkanInitializer:
         self.__bot = self.__create_bot(willListen)
         self.__add_cogs(self.__bot)
 
-    def getBot(self) -> VulkanBot:
+    def getBot(self) -> JimBoi:
         return self.__bot
 
-    def __create_bot(self, willListen: bool) -> VulkanBot:
+    def __create_bot(self, willListen: bool) -> JimBoi:
         if willListen:
             prefix = self.__config.BOT_PREFIX
-            bot = VulkanBot(listingSlash=True,
-                            command_prefix=prefix,
-                            pm_help=True,
-                            case_insensitive=True,
-                            intents=self.__intents)
+            bot = JimBoi(listingSlash=True,
+                         command_prefix=prefix,
+                         pm_help=True,
+                         case_insensitive=True,
+                         intents=self.__intents)
         else:
             prefix = ''.join(choices(string.ascii_uppercase + string.digits, k=4))
-            bot = VulkanBot(listingSlash=False,
-                            command_prefix=prefix,
-                            pm_help=True,
-                            case_insensitive=True,
-                            intents=self.__intents)
+            bot = JimBoi(listingSlash=False,
+                         command_prefix=prefix,
+                         pm_help=True,
+                         case_insensitive=True,
+                         intents=self.__intents)
         return bot
 
     def __add_cogs(self, bot: Bot) -> None:
@@ -50,7 +50,7 @@ class VulkanInitializer:
                 raise VulkanError(message='Failed to load some Cog')
 
         except VulkanError as e:
-            print(f'[Error Loading Vulkan]')
+            print(f'[Error Loading JimBoi]')
             print(e)
 
     def __getTotalCogs(self) -> int:

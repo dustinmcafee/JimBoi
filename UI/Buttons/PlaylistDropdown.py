@@ -5,7 +5,7 @@ from discord.ui import Select, View
 from Handlers.HandlerResponse import HandlerResponse
 from Messages.MessagesCategory import MessagesCategory
 from Messages.MessagesManager import MessagesManager
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Handlers.AbstractHandler import AbstractHandler
 from UI.Buttons.AbstractItem import AbstractItem
 from UI.Views.AbstractView import AbstractView
@@ -15,7 +15,7 @@ from Music.Playlist import Playlist
 class PlaylistDropdown(Select, AbstractItem):
     """Receives n elements to put in drop down and return the selected, pass the index value to a handler"""
 
-    def __init__(self, bot: VulkanBot, handler: type[AbstractHandler], playlist: Playlist, textChannel: TextChannel, guildID: int, category: MessagesCategory):
+    def __init__(self, bot: JimBoi, handler: type[AbstractHandler], playlist: Playlist, textChannel: TextChannel, guildID: int, category: MessagesCategory):
         songs = list(playlist.getSongs())
 
         values = [str(x) for x in range(1, len(songs) + 1)]

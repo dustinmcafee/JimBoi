@@ -8,8 +8,8 @@ class Messages(Singleton):
         if not super().created:
             self.__emojis = VEmojis()
             configs = VConfigs()
-            self.STARTUP_MESSAGE = 'Starting Vulkan...'
-            self.STARTUP_COMPLETE_MESSAGE = 'Vulkan is now operating.'
+            self.STARTUP_MESSAGE = 'Starting JimBoi...'
+            self.STARTUP_COMPLETE_MESSAGE = 'JimBoi is now operating.'
 
             self.SONGINFO_UPLOADER = "Uploader: "
             self.SONGINFO_DURATION = "Duration: "
@@ -40,10 +40,10 @@ class Messages(Singleton):
             self.SONG_MOVED_SUCCESSFULLY = 'Song `{}` in position `{}` moved to the position `{}` successfully'
             self.SONG_REMOVED_SUCCESSFULLY = 'Song `{}` removed successfully'
 
-            self.LOOP_ALL_ON = f'{self.__emojis.ERROR} Vulkan is looping all songs, use {configs.BOT_PREFIX}loop off to disable this loop first'
-            self.LOOP_ONE_ON = f'{self.__emojis.ERROR} Vulkan is looping one song, use {configs.BOT_PREFIX}loop off to disable this loop first'
-            self.LOOP_ALL_ALREADY_ON = f'{self.__emojis.LOOP_ALL} Vulkan is already looping all songs'
-            self.LOOP_ONE_ALREADY_ON = f'{self.__emojis.LOOP_ONE} Vulkan is already looping the current song'
+            self.LOOP_ALL_ON = f'{self.__emojis.ERROR} JimBoi is looping all songs, use {configs.BOT_PREFIX}loop off to disable this loop first'
+            self.LOOP_ONE_ON = f'{self.__emojis.ERROR} JimBoi is looping one song, use {configs.BOT_PREFIX}loop off to disable this loop first'
+            self.LOOP_ALL_ALREADY_ON = f'{self.__emojis.LOOP_ALL} JimBoi is already looping all songs'
+            self.LOOP_ONE_ALREADY_ON = f'{self.__emojis.LOOP_ONE} JimBoi is already looping the current song'
             self.LOOP_ALL_ACTIVATE = f'{self.__emojis.LOOP_ALL} Looping all songs'
             self.LOOP_ONE_ACTIVATE = f'{self.__emojis.LOOP_ONE} Looping the current song'
             self.LOOP_DISABLE = f'{self.__emojis.LOOP_OFF} Loop disabled'

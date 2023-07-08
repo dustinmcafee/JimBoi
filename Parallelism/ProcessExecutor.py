@@ -4,7 +4,7 @@ from discord.ui import View
 from Config.Emojis import VEmojis
 from Messages.MessagesCategory import MessagesCategory
 from Music.Playlist import Playlist
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Config.Messages import Messages
 from Music.Song import Song
 from Config.Embeds import VEmbeds
@@ -26,7 +26,7 @@ class ProcessCommandsExecutor:
     EMOJIS = VEmojis()
     MSG_MANAGER = MessagesManager()
 
-    def __init__(self, bot: VulkanBot, guildID: int) -> None:
+    def __init__(self, bot: JimBoi, guildID: int) -> None:
         self.__bot = bot
         self.__guildID = guildID
         self.__messagesManager = MessagesManager()
@@ -35,7 +35,7 @@ class ProcessCommandsExecutor:
         self.__emojis = VEmojis()
 
     @classmethod
-    async def sendNowPlayingToGuild(cls, bot: VulkanBot, playlist: Playlist, channel: TextChannel, song: Song, guild: Guild) -> None:
+    async def sendNowPlayingToGuild(cls, bot: JimBoi, playlist: Playlist, channel: TextChannel, song: Song, guild: Guild) -> None:
         # Get the lock of the playlist
         if playlist.isLoopingOne():
             title = cls.MESSAGES.ONE_SONG_LOOPING
@@ -53,13 +53,13 @@ class ProcessCommandsExecutor:
         view.set_message(message=message)
 
     @classmethod
-    def __getPlayerViewForGuild(cls, channel: TextChannel, guildID: int, bot: VulkanBot) -> View:
+    def __getPlayerViewForGuild(cls, channel: TextChannel, guildID: int, bot: JimBoi) -> View:
         buttons = cls.__getPlayerButtonsForGuild(channel, guildID, bot)
         view = BasicView(bot, buttons)
         return view
 
     @classmethod
-    def __getPlayerButtonsForGuild(cls, textChannel: TextChannel, guildID: int, bot: VulkanBot) -> List[Button]:
+    def __getPlayerButtonsForGuild(cls, textChannel: TextChannel, guildID: int, bot: JimBoi) -> List[Button]:
         """Create the Buttons to be inserted in the Player View"""
         buttons: List[Button] = []
 

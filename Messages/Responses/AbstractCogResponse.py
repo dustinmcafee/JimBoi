@@ -4,7 +4,7 @@ from discord.ext.commands import Context
 from discord import Message
 from Messages.MessagesCategory import MessagesCategory
 from Messages.MessagesManager import MessagesManager
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 
 
 class AbstractCommandResponse(ABC):
@@ -14,7 +14,7 @@ class AbstractCommandResponse(ABC):
         self.__category: MessagesCategory = category
         self.__context: Context = response.ctx
         self.__message: Message = response.ctx.message
-        self.__bot: VulkanBot = response.ctx.bot
+        self.__bot: JimBoi = response.ctx.bot
 
     @property
     def response(self) -> HandlerResponse:
@@ -25,7 +25,7 @@ class AbstractCommandResponse(ABC):
         return self.__category
 
     @property
-    def bot(self) -> VulkanBot:
+    def bot(self) -> JimBoi:
         return self.__bot
 
     @property

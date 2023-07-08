@@ -1,14 +1,14 @@
 from typing import Union
 from discord import Interaction
 from discord.ext.commands import Context
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Handlers.AbstractHandler import AbstractHandler
 from Handlers.HandlerResponse import HandlerResponse
 from Parallelism.AbstractProcessManager import AbstractPlayersManager
 
 
 class ClearHandler(AbstractHandler):
-    def __init__(self, ctx: Union[Context, Interaction], bot: VulkanBot) -> None:
+    def __init__(self, ctx: Union[Context, Interaction], bot: JimBoi) -> None:
         super().__init__(ctx, bot)
 
     async def run(self) -> HandlerResponse:

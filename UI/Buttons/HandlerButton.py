@@ -3,7 +3,7 @@ from discord import ButtonStyle, Interaction, Message, TextChannel
 from discord.ui import Button, View
 from Handlers.HandlerResponse import HandlerResponse
 from Messages.MessagesCategory import MessagesCategory
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Handlers.AbstractHandler import AbstractHandler
 from Messages.MessagesManager import MessagesManager
 
@@ -11,7 +11,7 @@ from Messages.MessagesManager import MessagesManager
 class HandlerButton(Button):
     """Button that will create and execute a Handler Object when clicked"""
 
-    def __init__(self, bot: VulkanBot, handler: type[AbstractHandler], emoji: VEmojis, textChannel: TextChannel, guildID: int, category: MessagesCategory, label=None, *args, **kwargs):
+    def __init__(self, bot: JimBoi, handler: type[AbstractHandler], emoji: VEmojis, textChannel: TextChannel, guildID: int, category: MessagesCategory, label=None, *args, **kwargs):
         super().__init__(label=label, style=ButtonStyle.secondary, emoji=emoji)
         self.__messagesManager = MessagesManager()
         self.__category = category

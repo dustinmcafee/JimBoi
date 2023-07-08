@@ -10,7 +10,7 @@ from discord import Guild, FFmpegPCMAudio, VoiceChannel
 from Music.Playlist import Playlist
 from Music.Song import Song
 from Config.Configs import VConfigs
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Music.Downloader import Downloader
 from Parallelism.Commands import VCommands, VCommandsType
 
@@ -31,7 +31,7 @@ class TimeoutClock:
 class ThreadPlayer(Thread):
     """Player Thread to control the song playback in the same Process of the Main Process"""
 
-    def __init__(self, bot: VulkanBot, guild: Guild, name: str, voiceChannel: VoiceChannel, playlist: Playlist, lock: Lock, guildID: int, voiceID: int, callbackToSendCommand: Callable, exitCB: Callable) -> None:
+    def __init__(self, bot: JimBoi, guild: Guild, name: str, voiceChannel: VoiceChannel, playlist: Playlist, lock: Lock, guildID: int, voiceID: int, callbackToSendCommand: Callable, exitCB: Callable) -> None:
         Thread.__init__(self, name=name, group=None, target=None, args=(), kwargs={})
         print(f'Starting Player Thread for Guild {self.name}')
         # Synchronization objects

@@ -7,7 +7,7 @@ from Parallelism.AbstractProcessManager import AbstractPlayersManager
 from Music.Song import Song
 from Music.Playlist import Playlist
 from Parallelism.Commands import VCommands, VCommandsType
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Parallelism.ProcessExecutor import ProcessCommandsExecutor
 from Parallelism.ThreadPlayer import ThreadPlayer
 
@@ -41,7 +41,7 @@ class ThreadPlayerManager(Singleton, AbstractPlayersManager):
     Manage all running player threads, creating and storing them for future calls
     """
 
-    def __init__(self, bot: VulkanBot = None) -> None:
+    def __init__(self, bot: JimBoi = None) -> None:
         if not super().created:
             self.__bot = bot
             self.__playersThreads: Dict[int, ThreadPlayerInfo] = {}

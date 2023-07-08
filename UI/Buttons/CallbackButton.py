@@ -5,13 +5,13 @@ from discord.ui import Button, View
 from Handlers.HandlerResponse import HandlerResponse
 from Messages.MessagesCategory import MessagesCategory
 from Messages.MessagesManager import MessagesManager
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 
 
 class CallbackButton(Button):
     """When clicked execute an callback passing the args and kwargs"""
 
-    def __init__(self, bot: VulkanBot, cb: Awaitable, emoji: VEmojis, textChannel: TextChannel, guildID: int, category: MessagesCategory, label=None, *args, **kwargs):
+    def __init__(self, bot: JimBoi, cb: Awaitable, emoji: VEmojis, textChannel: TextChannel, guildID: int, category: MessagesCategory, label=None, *args, **kwargs):
         super().__init__(label=label, style=ButtonStyle.secondary, emoji=emoji)
         self.__channel = textChannel
         self.__guildID = guildID

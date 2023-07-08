@@ -11,12 +11,12 @@ from Music.Searcher import Searcher
 from Music.Song import Song
 from Parallelism.AbstractProcessManager import AbstractPlayersManager
 from Parallelism.Commands import VCommands, VCommandsType
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from discord import Interaction
 
 
 class PlayHandler(AbstractHandler):
-    def __init__(self, ctx: Union[Context, Interaction], bot: VulkanBot) -> None:
+    def __init__(self, ctx: Union[Context, Interaction], bot: JimBoi) -> None:
         super().__init__(ctx, bot)
         self.__searcher = Searcher()
         self.__down = Downloader()

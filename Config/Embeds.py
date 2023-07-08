@@ -368,7 +368,7 @@ class VEmbeds:
         text = self.__messages.INVITE_MESSAGE.format(link, link)
 
         embed = Embed(
-            title="Invite Vulkan",
+            title="Invite JimBoi",
             description=text,
             colour=self.__colors.BLUE
         )

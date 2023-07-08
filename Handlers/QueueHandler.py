@@ -7,7 +7,7 @@ from Messages.MessagesCategory import MessagesCategory
 from Parallelism.AbstractProcessManager import AbstractPlayersManager
 from UI.Views.BasicView import BasicView
 from Utils.Utils import Utils
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Music.Song import Song
 from Music.Playlist import Playlist
 from typing import List, Union
@@ -18,7 +18,7 @@ from Config.Emojis import VEmojis
 
 
 class QueueHandler(AbstractHandler):
-    def __init__(self, ctx: Union[Context, Interaction], bot: VulkanBot) -> None:
+    def __init__(self, ctx: Union[Context, Interaction], bot: JimBoi) -> None:
         super().__init__(ctx, bot)
 
     async def run(self, pageNumber=0) -> HandlerResponse:

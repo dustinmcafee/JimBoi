@@ -1,6 +1,6 @@
 from UI.Views.AbstractView import AbstractView
 from UI.Buttons.AbstractItem import AbstractItem
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Config.Emojis import VEmojis
 from discord import Message
 from discord.ui import View
@@ -15,7 +15,7 @@ class BasicView(View, AbstractView):
     and the message that holds this View.
     """
 
-    def __init__(self, bot: VulkanBot, buttons: List[AbstractItem], timeout: float = 6000):
+    def __init__(self, bot: JimBoi, buttons: List[AbstractItem], timeout: float = 6000):
         super().__init__(timeout=timeout)
         self.__bot = bot
         self.__message: Message = None

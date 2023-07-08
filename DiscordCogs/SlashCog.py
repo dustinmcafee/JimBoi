@@ -18,7 +18,7 @@ from Handlers.LoopHandler import LoopHandler
 from Handlers.VolumeHandler import VolumeHandler
 from Messages.MessagesCategory import MessagesCategory
 from Messages.Responses.SlashEmbedResponse import SlashEmbedResponse
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Config.Embeds import VEmbeds
 from Config.Helper import Helper
 import traceback
@@ -33,8 +33,8 @@ class SlashCommands(Cog):
     Execute the handler and then create a specific View to be showed in Discord
     """
 
-    def __init__(self, bot: VulkanBot) -> None:
-        self.__bot: VulkanBot = bot
+    def __init__(self, bot: JimBoi) -> None:
+        self.__bot: JimBoi = bot
         self.__embeds = VEmbeds()
 
     @slash_command(name="play", description=helper.HELP_PLAY)

@@ -14,7 +14,7 @@ from Music.Song import Song
 from Parallelism.ProcessPlayer import ProcessPlayer
 from Music.Playlist import Playlist
 from Parallelism.Commands import VCommands, VCommandsType
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 
 
 class ProcessStatus(Enum):
@@ -70,7 +70,7 @@ class ProcessPlayerManager(Singleton, AbstractPlayersManager):
     Deals with the creation of shared memory
     """
 
-    def __init__(self, bot: VulkanBot = None) -> None:
+    def __init__(self, bot: JimBoi = None) -> None:
         if not super().created:
             self.__bot = bot
             VManager.register('Playlist', Playlist)

@@ -3,7 +3,7 @@ from discord.ext.commands import Cog, command
 from Config.Configs import VConfigs
 from Config.Helper import Helper
 from Config.Colors import VColors
-from Music.VulkanBot import VulkanBot
+from Music.JimBoi import JimBoi
 from Config.Embeds import VEmbeds
 
 helper = Helper()
@@ -12,7 +12,7 @@ helper = Helper()
 class ControlCog(Cog):
     """Class to handle discord events"""
 
-    def __init__(self, bot: VulkanBot):
+    def __init__(self, bot: JimBoi):
         self.__bot = bot
         self.__config = VConfigs()
         self.__colors = VColors()

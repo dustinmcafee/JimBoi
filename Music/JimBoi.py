@@ -7,7 +7,7 @@ from Config.Messages import Messages
 from Config.Embeds import VEmbeds
 
 
-class VulkanBot(Bot):
+class JimBoi(Bot):
     def __init__(self, listingSlash: bool = False, *args, **kwargs):
         """If listing Slash is False then the process is just a Player Process, should not interact with discord commands"""
         super().__init__(*args, **kwargs)
@@ -77,5 +77,5 @@ class VulkanBot(Bot):
 
 
 class Context(Context):
-    bot: VulkanBot
+    bot: JimBoi
     guild: Guild
