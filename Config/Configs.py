@@ -4,6 +4,7 @@ from Config.Folder import Folder
 
 
 class VConfigs(Singleton):
+
     def __init__(self) -> None:
         if not super().created:
             # You can change this boolean to False if you want to prevent the Bot from auto disconnecting
@@ -23,6 +24,8 @@ class VConfigs(Singleton):
                 self.SPOTIFY_ID = config('SPOTIFY_ID')
                 self.SPOTIFY_SECRET = config('SPOTIFY_SECRET')
                 self.BOT_PREFIX = config('BOT_PREFIX')
+                self.OPENAI_KEY = config('OPENAI_KEY')
+
             except:
                 print(
                     '[ERROR] -> You must create and .env file with all required fields, see documentation for help')

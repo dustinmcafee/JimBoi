@@ -54,3 +54,5 @@ class Helper(Singleton):
 
             self.SLASH_QUEUE_DESCRIPTION = f'Number of queue page, there is only {config.MAX_SONGS_IN_PAGE} musics by page'
             self.SLASH_MOVE_HELP = 'Moves a song from position pos1 to pos2 in queue.'
+            self.HELP_OPENAI = "OpenAI's GPT-3 API"
+            self.HELP_OPENAI_LONG = "OpenAI's GPT-3 API"

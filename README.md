@@ -1,9 +1,9 @@
-<h1 align="center">Vulkan</h1> 
+<h1 align="center">JimBoi</h1> 
 
 
-A Music Discord Bot, that plays *Youtube*, *Spotify*, *Deezer* links or raw queries. Vulkan is open source, so everyone can fork this project, follow the instructions and use it in their own way, executing it in your own machine or hosting in others machines to work 24/7.
+A Music Discord Bot, that plays *Youtube*, *Spotify*, *Deezer* links or raw queries. JimBoi is open source, so everyone can fork this project, follow the instructions and use it in their own way, executing it in your own machine or hosting in others machines to work 24/7.
 
-Vulkan uses multiprocessing and asynchronous Python modules to maximize Music Player response time, so the player doesn't lag when many commands are being processed and it can play in multiples discord serves at the same time without affecting the Music Player response time.
+JimBoi uses multiprocessing and asynchronous Python modules to maximize Music Player response time, so the player doesn't lag when many commands are being processed and it can play in multiples discord serves at the same time without affecting the Music Player response time.
 
 
 <p align="center">
@@ -97,7 +97,7 @@ The tests were written manually with no package due to problems with async funct
 
 
 ## 📖 License
-This program is free software: you can redistribute it and/or modify it under the terms of the [MIT License](https://github.com/RafaelSolVargas/Vulkan/blob/master/LICENSE).
+This program is free software: you can redistribute it and/or modify it under the terms of the [MIT License](https://github.com/dustinmcafee/JimBoi/blob/master/LICENSE).
 
 
 
