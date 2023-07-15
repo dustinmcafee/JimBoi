@@ -81,36 +81,6 @@ def get_conversation_summary(conversation_section: str, openai_key: str,
         if not quiet: info(f'Failed to get summary: {str(e)}', 'bad')
         return (False, '', 0)
 
-def hostile_or_personal(text: str) -> bool:
-    """
-    This tests the text to see if it is hostile
-    or references a person. This test is done by
-    your computer and should be done before
-    testing with OpenAI.
-    :param text: This is the text you want to test.
-    :return: bool regarding status. If true, reject text
-    """
-
-    # Sentiment Analysis
-    sid = SentimentIntensityAnalyzer()
-    scores = sid.polarity_scores(text)
-    negative_score = scores['neg']
-
-    # Named Entity
-    named_entities = []
-    chunked = ne_chunk(pos_tag(word_tokenize(text)))
-    for chunk in chunked:
-        if hasattr(chunk, 'label'):
-            named_entities.append(chunk.label())
-
-    # Check for manipulation
-    if ((negative_score > 0.8) or ('PERSON' in named_entities and negative_score > 0.5)) and len(text[:-1]) > 2:
-        info(f'Rejected due to NLTK analysis. Negative score = {negative_score}; person in content = {"PERSON" in named_entities}.' + 
-             ' Rejection threshold = 0.5 if persons in content, else 0.8 generally.')
-        return True
-    else:
-        return False
-
 def save_conversation(conversation: str, name:str):
     
     # 1. Setup directory for conversations
@@ -183,26 +153,6 @@ class Chatbot():
         else:
             self.set_model('gpt-4')
 
-    def flagged_by_openai(self, text: str) -> bool:
-        """
-        Tests text using OpenAI api. If it fails or is flagged, return false.
-        :param text:
-        :return: bool representing if the material is flagged or something else.
-        A return of False means the text is good to go
-        """
-        try:
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.api_key}"
-            }
-            data = {"input": text}
-            response = requests.post("https://api.openai.com/v1/moderations", headers=headers, json=data)
-            return json.loads(response.text)['results'][0]['flagged']  # This is a bool
-
-        except Exception as e:
-            info(f'Failed to test with OpenAI. Key might be invalid.', 'bad')
-            return True
-
     def gpt_response(self, prompt: str) -> str:
         if not self.gpt_model == 'gpt-3.5-turbo' and not self.gpt_model == 'gpt-4':
             response = openai.Completion.create(
@@ -245,109 +195,104 @@ class Chatbot():
         """
         prompt = text
 
-        if not hostile_or_personal(text) and not self.flagged_by_openai(text):
-            self.restore_conversation()  # This will update current time
+        self.restore_conversation() # This will update current time
 
-            # 1. Get response
-            start_sequence = f"\n{self.name}:"
-            restart_sequence = "\nHuman: "
-            self.conversation += f'\nHuman: {text}'
-            self.full_conversation += f'\nHuman: {text}'
-            self.back_and_forth.append(f'\nHuman: {text}')
+        # 1. Get response
+        start_sequence = f"\n{self.name}:"
+        restart_sequence = "\nHuman: "
+        self.conversation += f'\nHuman: {text}'
+        self.full_conversation += f'\nHuman: {text}'
+        self.back_and_forth.append(f'\nHuman: {text}')
 
-            try:
-                response = self.gpt_response(prompt)
+        try:
+            response = self.gpt_response(prompt)
 
-            except Exception as e:
-                if 'server had an error while processing' in str(e):  # If connection issue, try again once more
-                    try:
-                        response = self.gpt_response(prompt)
+        except Exception as e:
+            if 'server had an error while processing' in str(e):  # If connection issue, try again once more
+                try:
+                    response = self.gpt_response(prompt)
 
-                    except Exception as e:
-                        info(f'Error communicating with GPT-3: {e}', 'bad')
-                        return ''
-
-                elif ('Please reduce your prompt; or completion length' in str(e) or
-                      'maximum context length is 4096' in str(e)):  # Too many tokens. 
-                    info('Max tokens reached. Conversation will continue on with a superficial '+ 
-                        'memory of what was previously discussed', 'bad')
-                    self.recycle_tokens()
-                    settings = (text, outloud, show_text)  # This will allow me to easily pass arguments down to recursive function
-                    return self.say_to_chatbot(text=settings[0], outloud=settings[1], show_text=settings[2])
-
-                
-                else:  # If we don't know what happened, don't immediately try again
+                except Exception as e:
                     info(f'Error communicating with GPT-3: {e}', 'bad')
                     return ''
 
-            response = json.loads(str(response))
-            self.tokens = response['usage']['total_tokens']  # We assign tokens to response token since response counts everything
-            
-            # Cut response
-            if not self.gpt_model == 'gpt-3.5-turbo' and not self.gpt_model == 'gpt-4':
-                reply = response['choices'][0]['text']
-            else:
-                reply = response['choices'][0]['message']['content']
+            elif ('Please reduce your prompt; or completion length' in str(e) or
+                  'maximum context length is 4096' in str(e)):  # Too many tokens. 
+                info('Max tokens reached. Conversation will continue on with a superficial '+ 
+                    'memory of what was previously discussed', 'bad')
+                self.recycle_tokens()
+                settings = (text, outloud, show_text)  # This will allow me to easily pass arguments down to recursive function
+                return self.say_to_chatbot(text=settings[0], outloud=settings[1], show_text=settings[2])
 
-            # If AI tryna say it's an AI, stop it. User knows it's an AI. 
-            # Also manage token count here
-            if declares_self_ai(reply):
-                try:
-                    new_response = stay_in_character(reply, self.api_key, self.model_selection)
+            else:  # If we don't know what happened, don't immediately try again
+                info(f'Error communicating with GPT-3: {e}', 'bad')
+                return ''
 
-                    if new_response[0]:  # If the attempt was successful
-                        #self.tokens += new_response[2]  # Add tokens to total
-                        reply = new_response[1]
-                
-                except Exception as e:  # If it fails, it's not terribly important
-                    info(f'Failed to have AI stay in character: {e}')
+        response = json.loads(str(response))
+        self.tokens = response['usage']['total_tokens']  # We assign tokens to response token since response counts everything
 
-            else:
-                pass
+        # Cut response
+        if not self.gpt_model == 'gpt-3.5-turbo' and not self.gpt_model == 'gpt-4':
+            reply = response['choices'][0]['text']
+        else:
+            reply = response['choices'][0]['message']['content']
 
-            # If chatbot says time, replace with current time (it does not understand time and will give the wrong answer otherwise)
-            if correct_time:
-                now = datetime.now()
-                time = convert_to_12hr(now.hour, now.minute)
-                reply = replace_time(reply, time)
-
-            # If chatbot tries to say good but only says 'od', help it out
-            reply = replace_od(reply)
-
-            # Show / play text
-            if show_text:
-                info(f'{self.name}\'s Response', 'topic')
-                info(self.get_AI_response(reply), 'plain')
-
-                info('Token Count', 'topic')
-                info(f'{self.tokens} tokens used. {self.max_tokens - self.tokens} tokens until next recycling.', 'plain')
-
+        # If AI tryna say it's an AI, stop it. User knows it's an AI. 
+        # Also manage token count here
+        if declares_self_ai(reply):
             try:
-                if outloud and not self.robospeak: 
-                    self.use11 = talk(self.get_AI_response(reply), f'{self.turns}',
-                                    self.use11, self.api_key_11, show_text=show_text, 
-                                    eleven_voice_id=self.voice_id)  # Speak if setting turned on
-                
-                elif outloud and self.robospeak:
-                    robospeak(self.get_AI_response(reply))
+                new_response = stay_in_character(reply, self.api_key, self.model_selection)
 
-            except Exception as e:
-                info(f'Error trying to speak: {e}', 'bad')
-                self.use11 = False
+                if new_response[0]:  # If the attempt was successful
+                    #self.tokens += new_response[2]  # Add tokens to total
+                    reply = new_response[1]
 
-            # Keep track of conversation
-            self.turns += 1
-            self.conversation += reply
-            self.full_conversation += reply
-            self.back_and_forth.append(reply)
-
-            save_conversation(self.full_conversation, self.conversation_name)
-
-            return reply
+            except Exception as e:  # If it fails, it's not terribly important
+                info(f'Failed to have AI stay in character: {e}')
 
         else:
-            info('Text flagged, no request sent.', 'bad')
-            return '[X] Text flagged, no request sent.'
+            pass
+
+        # If chatbot says time, replace with current time (it does not understand time and will give the wrong answer otherwise)
+        if correct_time:
+            now = datetime.now()
+            time = convert_to_12hr(now.hour, now.minute)
+            reply = replace_time(reply, time)
+
+        # If chatbot tries to say good but only says 'od', help it out
+        reply = replace_od(reply)
+
+        # Show / play text
+        if show_text:
+            info(f'{self.name}\'s Response', 'topic')
+            info(self.get_AI_response(reply), 'plain')
+
+            info('Token Count', 'topic')
+            info(f'{self.tokens} tokens used. {self.max_tokens - self.tokens} tokens until next recycling.', 'plain')
+
+        try:
+            if outloud and not self.robospeak: 
+                self.use11 = talk(self.get_AI_response(reply), f'{self.turns}',
+                                self.use11, self.api_key_11, show_text=show_text, 
+                                eleven_voice_id=self.voice_id)  # Speak if setting turned on
+
+            elif outloud and self.robospeak:
+                robospeak(self.get_AI_response(reply))
+
+        except Exception as e:
+            info(f'Error trying to speak: {e}', 'bad')
+            self.use11 = False
+
+        # Keep track of conversation
+        self.turns += 1
+        self.conversation += reply
+        self.full_conversation += reply
+        self.back_and_forth.append(reply)
+
+        save_conversation(self.full_conversation, self.conversation_name)
+
+        return reply
+
 
     def recycle_tokens(self, chunk_by: int = 2, quiet=True):
         info('Recycling tokens ...')
@@ -367,10 +312,9 @@ class Chatbot():
             if chunks and tokens_in_chunks < threshold:  # If the list is not empty and we have enough spare tokens
                 try:
                     prompt = str(chunks[0])  # Grab first chunk
-                    if not self.flagged_by_openai(prompt):  # Make sure it's clean
-                        summary = get_conversation_summary(prompt, self.api_key, gpt_model=gpt_model, quiet=quiet)  # Summarize it
-                        summaries.append(summary[1])  # Save summary
-                        tokens_in_chunks += summary[2]  # Record added tokens to avoid passing threshold
+                    summary = get_conversation_summary(prompt, self.api_key, gpt_model=gpt_model, quiet=quiet)  # Summarize it
+                    summaries.append(summary[1])  # Save summary
+                    tokens_in_chunks += summary[2]  # Record added tokens to avoid passing threshold
 
                 except Exception as e:  # Ignore failures, full memory is not critical and bot is aware it can forget
                     if not quiet: info(f'Error recycling: {e}', 'bad')
@@ -477,11 +421,10 @@ class Chatbot():
             if chunks and tokens_in_chunks < threshold:  # If the list is not empty and we have enough spare tokens
                 try:
                     prompt = str(chunks[0])  # Grab first chunk
-                    if not self.flagged_by_openai(prompt):  # Make sure it's clean
-                        summary = get_conversation_summary(prompt, self.api_key, gpt_model=model_placeholder, quiet=quiet,
-                                                           custom_prompt=memory_directive)  # Summarize it
-                        summaries.append(summary[1])  # Save summary
-                        tokens_in_chunks += summary[2]  # Record added tokens to avoid passing threshold
+                    summary = get_conversation_summary(prompt, self.api_key, gpt_model=model_placeholder, quiet=quiet,
+                                                       custom_prompt=memory_directive)  # Summarize it
+                    summaries.append(summary[1])  # Save summary
+                    tokens_in_chunks += summary[2]  # Record added tokens to avoid passing threshold
 
                 except Exception as e:  # Ignore failures, full memory is not critical
                     if not quiet: info(f'Error memorizing: {e}', 'bad')
@@ -769,13 +712,13 @@ class Chatbot():
                 preset = file.read()
 
         # 2.2 Test name and preset
-        if not name == 'AI' and hostile_or_personal(name) and self.flagged_by_openai(name):  # Disallow policy violation names
+        if not name == 'AI':
             with open('neocortex/self_concept/name.txt', 'w') as file:
                 file.write('AI')
             name = 'AI'
             info('Name rejected for potential use policy violation', 'bad')
 
-        if not preset == 'nothing' and hostile_or_personal(name) and self.flagged_by_openai(name):
+        if not preset == 'nothing':
             with open('neocortex/self_concept/preset.txt', 'w'):
                 file.write('nothing')
 
@@ -846,10 +789,6 @@ class Chatbot():
         # 2. Create / modify files
         data = data.replace('\n', '')
         
-        if hostile_or_personal(data) and self.flagged_by_openai(data):
-            info('Update may be in violation of OpenAI\'s usage policy and has been rejected', 'bad')
-            return False
-
         if data_type == 'name':
             with open('neocortex/self_concept/name.txt', 'w') as file:
                 file.write(data)
@@ -892,18 +831,14 @@ class Chatbot():
         clean_name = new_name.replace(' ', '')
         clean_name = clean_name.replace('\n', '')
 
-        if not hostile_or_personal(new_name) and not self.flagged_by_openai(new_name):
-            with open('neocortex/self_concept/name.txt', 'w') as file:
-                file.write(clean_name)
+        with open('neocortex/self_concept/name.txt', 'w') as file:
+            file.write(clean_name)
 
-            old_name = self.name
-            self.name = clean_name
-            self.restore_conversation(True, old_name)
-            return True
+        old_name = self.name
+        self.name = clean_name
+        self.restore_conversation(True, old_name)
+        return True
 
-        else:
-            return False
-        
 
     def set_model(self, desired_model: str, quiet=True):
         """
@@ -979,39 +914,35 @@ class GPT3(Chatbot):
         openai.api_key = api_key 
 
     def request(self, text:str, tokens: int = 1000):
-        if not hostile_or_personal(text) and not self.flagged_by_openai(text):
+        # 1. Get response
+        response = openai.Completion.create(
+        model=self.gpt_model,
+        prompt=text,
+        temperature=0.9,
+        max_tokens=tokens,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0.6,
+        )
 
-            # 1. Get response
-            response = openai.Completion.create(
-            model=self.gpt_model,
-            prompt=text,
-            temperature=0.9,
-            max_tokens=tokens,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0.6,
-            )
-
-            # Cut response and play it
-            reply = json.loads(str(response))['choices'][0]['text']
-            return reply
+        # Cut response and play it
+        reply = json.loads(str(response))['choices'][0]['text']
+        return reply
 
     def raw_request(self, text:str, tokens: int = 1000):
-        if not hostile_or_personal(text) and not self.flagged_by_openai(text):
+        # 1. Get response
+        response = openai.Completion.create(
+        model=self.gpt_model,
+        prompt=text,
+        temperature=0.9,
+        max_tokens=tokens,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0.6,
+        )
 
-            # 1. Get response
-            response = openai.Completion.create(
-            model=self.gpt_model,
-            prompt=text,
-            temperature=0.9,
-            max_tokens=tokens,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0.6,
-            )
+        return response
 
-            return response
-        
     def get_text_tokens(self, prompt: str, max_token_ct: int = 200, 
                         sys_prompt: str = 'Follow all the users\' directives') -> tuple:
         '''

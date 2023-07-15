@@ -5,7 +5,7 @@ from Config.Configs import VConfigs
 from Config.Embeds import VEmbeds
 from Config.Helper import Helper
 from Music.JimBoi import JimBoi
-from Utils.Chatbot import Chatbot, hostile_or_personal, info
+from Utils.Chatbot import Chatbot, info
 
 helper = Helper()
 
@@ -21,7 +21,6 @@ class OpenAICog(Cog):
 
         # Ensure that nltk is downloaded
         try:
-            hostile_or_personal('Thats pretty wack yo')
             info('NLTK Loaded', 'good')
 
         except Exception as e:
