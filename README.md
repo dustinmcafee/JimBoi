@@ -18,6 +18,7 @@ JimBoi uses multiprocessing and asynchronous Python modules to maximize Music Pl
 - Support for the new Discord Slash commands.
 - Search for all musics in Queue using buttons.
 - Shortcut the playing of one song using dropdown menu.
+- Manage the volume of the songs.
 - Manage the loop of one or all playing musics.
 - Manage the order and remove musics from the queue.
 - Shuffle the musics queue order.
@@ -62,16 +63,17 @@ You can download the executables in this link `https://www.ffmpeg.org/download.h
 
 ### **.Env File Example**
 This is an example of how your .env file (located in root) should look like.
-```
+```env
 BOT_TOKEN=Your_Own_Bot_Token
 SPOTIFY_ID=Your_Own_Spotify_ID
 SPOTIFY_SECRET=Your_Own_Spotify_Secret
 BOT_PREFIX=Your_Wanted_Prefix_For_Vulkan
-
+SHOULD_AUTO_DISCONNECT_WHEN_ALONE=True #all settings can be set like this
+#etc... All settings can be set this way
 ```
 
 ### **⚙️ Configs**
-The config file is located at ```./config/Configs.py```, it doesn't require any change, but if you can change the values to the way you want. <br>
+The bot's configuration is stored in the [.env](.env) file, you can change the prefix and the bot token there, as well as all the other configurations.
 Take a look in the [Settings page](.github/Docs/SETTINGS.md) to personalize the Bot for you.
 
 
@@ -79,6 +81,9 @@ Take a look in the [Settings page](.github/Docs/SETTINGS.md) to personalize the 
 - Go to [Discord](https://discord.com/developers) and invite your Bot to your own server
 - Run ```python main.py``` in console to start
 - Give this project a nice 🌟
+
+### **🐳 Docker**
+You can also run this project in a Docker container. You can find the instructions to run this project in a Docker container in the [Docker Instructions](.github/Docs/DOCKER.md) page.
 
 
 <br>
